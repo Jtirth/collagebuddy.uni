@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Firebase Test - Study Buddy</title>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+
+        .test-card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            color: #2563EB;
+        }
+
+        .status {
+            padding: 10px;
+            border-radius: 6px;
+            margin: 10px 0;
+        }
+
+        .success {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .error {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .info {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        button {
+            background: #2563EB;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 10px 5px 10px 0;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+        }
+
+        pre {
+            background: #1e293b;
+            color: #f8fafc;
+            padding: 15px;
+            border-radius: 6px;
+            overflow-x: auto;
+        }
+
+        .step {
+            margin: 15px 0;
+            padding-left: 20px;
+            border-left: 3px solid #2563EB;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="test-card">
+        <h1>🔧 Firebase Authentication Test</h1>
+        <p>This page will help diagnose authentication issues.</p>
+
+        <div id="status"></div>
+
+        <button onclick="testFirebase()">1. Test Firebase Connection</button>
+        <button onclick="testGoogleSignIn()">2. Test Google Sign-In</button>
+        <button onclick="checkAuthState()">3. Check Auth State</button>
+    </div>
+
+    <div class="test-card">
+        <h2>📋 Setup Checklist</h2>
+        <div class="step">
+            <h3>Step 1: Authorize Your Domain</h3>
+            <p>Go to <a href="https://console.firebase.google.com/project/study-buddy-71ae7/authentication/settings"
+                    target="_blank">Firebase Console → Authentication → Settings</a></p>
+            <p>Add these domains to "Authorized domains":</p>
+            <ul>
+                <li><code>localhost</code></li>
+                <li><code>127.0.0.1</code></li>
+            </ul>
+        </div>
+
+        <div class="step">
+            <h3>Step 2: Enable Google Sign-In</h3>
+            <p>Go to <a href="https://console.firebase.google.com/project/study-buddy-71ae7/authentication/providers"
+                    target="_blank">Firebase Console → Authentication → Sign-in method</a></p>
+            <p>Make sure "Google" provider is <strong>Enabled</strong></p>
+        </div>
+    </div>
+
+    <div class="test-card">
+        <h2>📊 Console Output</h2>
+        <div id="console-output"></div>
+    </div>
+
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="js/firebase-config.js"></script>
+
+    <script>
+        const statusDiv = document.getElementById('status');
+        const consoleDiv = document.getElementById('console-output');
+
+        function log(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            consoleDiv.innerHTML += `<pre>[${timestamp}] ${message}</pre>`;
+            console.log(message);
+        }
+
+        function showStatus(message, type = 'info') {
+            statusDiv.innerHTML = `<div class="status ${type}">${message}</div>`;
+        }
+
+        function testFirebase() {
+            log('Testing Firebase initialization...');
+            try {
+                if (firebase.apps.length > 0) {
+                    showStatus('✅ Firebase is initialized successfully!', 'success');
+                    log(`✅ Firebase App Name: ${firebase.app().name}`);
+                    log(`✅ Project ID: ${firebase.app().options.projectId}`);
+                    log(`✅ Auth Domain: ${firebase.app().options.authDomain}`);
+                } else {
+                    showStatus('❌ Firebase is not initialized', 'error');
+                    log('❌ No Firebase apps found');
+                }
+            } catch (error) {
+                showStatus('❌ Error: ' + error.message, 'error');
+                log('❌ Error: ' + error.message);
+            }
+        }
+
+        function testGoogleSignIn() {
+            log('Attempting Google Sign-In...');
+            showStatus('🔄 Opening Google Sign-In popup...', 'info');
+
+            const provider = new firebase.auth.GoogleAuthProvider();
+
+            firebase.auth().signInWithPopup(provider)
+                .then((result) => {
+                    showStatus('✅ Sign-In Successful! User: ' + result.user.email, 'success');
+                    log('✅ Sign-In Successful!');
+                    log(`User Email: ${result.user.email}`);
+                    log(`User Name: ${result.user.displayName}`);
+                    log(`User ID: ${result.user.uid}`);
+                })
+                .catch((error) => {
+                    showStatus('❌ Sign-In Failed: ' + error.code, 'error');
+                    log('❌ Error Code: ' + error.code);
+                    log('❌ Error Message: ' + error.message);
+
+                    if (error.code === 'auth/unauthorized-domain') {
+                        log('⚠️  FIX: Add your domain to Firebase Console Authorized domains');
+                    } else if (error.code === 'auth/popup-blocked') {
+                        log('⚠️  FIX: Allow popups in your browser');
+                    } else if (error.code === 'auth/operation-not-allowed') {
+                        log('⚠️  FIX: Enable Google provider in Firebase Console');
+                    }
+                });
+        }
+
+        function checkAuthState() {
+            log('Checking authentication state...');
+            const user = firebase.auth().currentUser;
+
+            if (user) {
+                showStatus('✅ User is signed in: ' + user.email, 'success');
+                log('✅ Current User:');
+                log(`  Email: ${user.email}`);
+                log(`  Name: ${user.displayName}`);
+                log(`  Photo: ${user.photoURL}`);
+            } else {
+                showStatus('ℹ️ No user is currently signed in', 'info');
+                log('ℹ️ No user signed in');
+            }
+        }
+
+        // Auto-test on load
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                log('=== Automatic Tests ===');
+                testFirebase();
+            }, 500);
+        });
+    </script>
+</body>
+
+</html>

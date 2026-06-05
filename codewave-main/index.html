@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="stylesheet" href="css/nev.css">
+ 
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MockMate Interview Hub</title>
+  <link rel="stylesheet" href="css/index.css" />
+  <!-- Chart.js library -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body style="background-image: url('image/finaall.jpg');">
+      <nav class="navbar">
+  <div class="nav-container">
+    <a href="index.html" class="nav-logo">MockMate</a>
+    
+    <div class="nav-toggle" id="navToggle">
+      ☰
+    </div>
+
+    <ul class="nav-menu" id="navMenu">
+      <li><a href="index.html" class="nav-link">Home</a></li>
+      <li><a href="login.html" class="nav-link">Login</a></li>
+      <li><a href="mock_interview.html" class="nav-link">Mock Interview</a></li>
+      <li><a href="feedback.html" class="nav-link">Feedback</a></li>
+      <li><a href="settings.html" class="nav-link">Settings</a></li>
+    </ul>
+  </div>
+</nav>
+
+</nav>
+   <!-- Add this code to your index.html -->
+
+  <div class="container">
+    <header>
+      <h1>Hi Student, ready to prep?</h1>
+    </header>
+
+    <section class="actions">
+      <button id="newInterviewBtn">New Mock Interview</button>
+      <button id="viewFeedbackBtn">View Past Feedback</button>
+      <button id="customizeInterviewBtn">Customize Interview</button>
+    </section>
+
+    <section class="progress-overview">
+      <h2>Progress Overview</h2>
+
+      <div class="progress-item">
+        <h3>Confidence Level 📈</h3>
+        <canvas id="confidenceChart" width="300" height="150"></canvas>
+      </div>
+
+      <div class="progress-item">
+        <h3>Recent Feedback Summary</h3>
+        <p id="feedbackSummary">You handled behavioral questions well. Focus on technical clarity next time.</p>
+      </div>
+
+      <div class="progress-item">
+        <h3>Weekly Practice Hours ⏱️</h3>
+        <p id="practiceHours">5 hours this week</p>
+      </div>
+
+      <div class="progress-item tips">
+        <h3>Tips / Daily Advice</h3>
+        <p id="dailyTip">Focus on STAR format today.</p>
+      </div>
+    </section>
+  </div>
+
+  <script src="js/index.js"></script>
+   <script src="js/nev.js"></script>
+</body>
+</html>

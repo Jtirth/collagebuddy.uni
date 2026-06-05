@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MockMate - AI Interview Feedback</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f4f7fc;
+      margin: 0;
+      padding: 20px;
+      color: #333;
+        background-size: cover;
+  background-repeat: no-repeat;
+    }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 12px;
+      padding: 30px 40px;
+      box-shadow: 0 12px 30px rgb(0 0 0 / 0.1);
+        margin-top: 6%;
+    }
+    header h1 {
+      text-align: center;
+      margin-bottom: 30px;
+      color: #2e3a59;
+    }
+    h2 {
+      color: #4169e1;
+      margin-bottom: 15px;
+      border-bottom: 2px solid #4169e1;
+      padding-bottom: 8px;
+    }
+    .score-breakdown {
+      margin-bottom: 40px;
+    }
+    .score-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+    .score-item label {
+      flex: 1 0 180px;
+      font-weight: 600;
+    }
+    progress {
+      flex-grow: 1;
+      height: 18px;
+      border-radius: 9px;
+      -webkit-appearance: none;
+      appearance: none;
+      margin-right: 15px;
+      background-color: #ddd;
+    }
+    progress::-webkit-progress-bar {
+      background-color: #ddd;
+      border-radius: 9px;
+    }
+    progress::-webkit-progress-value {
+      background-color: #4169e1;
+      border-radius: 9px;
+    }
+    .score-value {
+      width: 50px;
+      font-weight: 600;
+      color: #4169e1;
+      text-align: right;
+    }
+    .transcript-section {
+      margin-bottom: 40px;
+      line-height: 1.5;
+    }
+    .transcript-section p {
+      margin-bottom: 10px;
+    }
+    .highlight-weakness {
+      background-color: #ffd6d6;
+      color: #b00020;
+      padding: 2px 6px;
+      border-radius: 3px;
+    }
+    .highlight-suggestion {
+      background-color: #e0f2ff;
+      color: #135ba1;
+      padding: 2px 6px;
+      border-radius: 3px;
+    }
+    .tips-section {
+      margin-bottom: 40px;
+    }
+    #tipsList {
+      list-style-type: disc;
+      padding-left: 20px;
+      font-size: 1.1rem;
+    }
+    .actions {
+      text-align: center;
+    }
+    .actions button {
+      background-color: #4169e1;
+      color: white;
+      border: none;
+      padding: 12px 28px;
+      font-size: 1rem;
+      margin: 10px 15px;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      box-shadow: 0 6px 12px rgb(65 105 225 / 0.6);
+    }
+    .actions button:hover {
+      background-color: #274bb5;
+    }
+  </style>
+  <link rel="stylesheet" href="css/nev.css">
+</head>
+<body style="background-image: url('image/finaall.jpg');">
+<nav class="navbar">
+  <div class="nav-container">
+    <a href="index.html" class="nav-logo">MockMate</a>
+    
+    <div class="nav-toggle" id="navToggle">
+      ☰
+    </div>
+
+    <ul class="nav-menu" id="navMenu">
+      <li><a href="index.html" class="nav-link">Home</a></li>
+      <li><a href="login.html" class="nav-link">Login</a></li>
+      <li><a href="mock_interview.html" class="nav-link">Mock Interview</a></li>
+      <li><a href="feedback.html" class="nav-link">Feedback</a></li>
+      <li><a href="settings.html" class="nav-link">Settings</a></li>
+    </ul>
+  </div>
+</nav>
+
+
+  <div class="container">
+    <header>
+      <h1>Interview Feedback</h1>
+    </header>
+
+    <section class="score-breakdown">
+      <h2>Score Breakdown</h2>
+      <div class="score-item">
+        <label for="clarity">Communication Clarity</label>
+        <progress id="clarity" value="85" max="100" aria-label="Communication Clarity"></progress>
+        <span class="score-value">85%</span>
+      </div>
+      <div class="score-item">
+        <label for="confidence">Confidence</label>
+        <progress id="confidence" value="78" max="100" aria-label="Confidence"></progress>
+        <span class="score-value">78%</span>
+      </div>
+      <div class="score-item">
+        <label for="contentQuality">Content Quality</label>
+        <progress id="contentQuality" value="90" max="100" aria-label="Content Quality"></progress>
+        <span class="score-value">90%</span>
+      </div>
+      <div class="score-item">
+        <label for="bodyLanguage">Body Language</label>
+        <progress id="bodyLanguage" value="70" max="100" aria-label="Body Language"></progress>
+        <span class="score-value">70%</span>
+      </div>
+    </section>
+
+    <section class="transcript-section">
+      <h2>Transcript & AI Suggestions</h2>
+      <div class="transcript" id="transcript">
+        <p>Tell me about yourself.</p>
+        <p>
+          <span class="highlight-weakness">I am a software engineer</span> with 3 years of experience.
+          I have worked on <span class="highlight-suggestion">various projects</span> ranging from web apps to backend systems.
+          <span class="highlight-weakness">My communication could be clearer</span> when explaining complex topics.
+        </p>
+        <p>The role interests me because it aligns well with my skills and career goals.</p>
+      </div>
+    </section>
+
+    <section class="tips-section">
+      <h2>Personalized Tips</h2>
+      <ul id="tipsList">
+        <li>Focus on structuring answers with the STAR method.</li>
+        <li>Practice speaking more slowly and clearly.</li>
+        <li>Work on maintaining confident body posture.</li>
+        <li>Use specific examples to demonstrate skills.</li>
+      </ul>
+    </section>
+
+    <section class="actions">
+      <button id="generatePdfBtn">Download PDF Report</button>
+      <button id="generateBasicPdfBtn">Download Basic Report</button>
+      <button id="shareMentorBtn">Share with Mentor</button>
+    </section>
+  </div>
+
+  <!-- jsPDF Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script>
+    const { jsPDF } = window.jspdf;
+
+    const tips = [
+      'Focus on structuring answers with the STAR method.',
+      'Practice speaking more slowly and clearly.',
+      'Work on maintaining confident body posture.',
+      'Use specific examples to demonstrate skills.'
+    ];
+
+    function addWrappedText(doc, textArray, startX, startY) {
+      textArray.forEach(line => {
+        const wrapped = doc.splitTextToSize(line, 180);
+        doc.text(wrapped, startX, startY);
+        startY += wrapped.length * 7;
+      });
+      return startY;
+    }
+
+    document.getElementById('generatePdfBtn').addEventListener('click', () => {
+      const doc = new jsPDF();
+      doc.setFontSize(20);
+      doc.text('MockMate Interview Feedback', 14, 22);
+
+      doc.setFontSize(14);
+      doc.text('Score Breakdown:', 14, 35);
+
+      const scores = [
+        { label: 'Communication Clarity', value: 85 },
+        { label: 'Confidence', value: 78 },
+        { label: 'Content Quality', value: 90 },
+        { label: 'Body Language', value: 70 }
+      ];
+
+      let y = 45;
+      scores.forEach(score => {
+        doc.text(`${score.label}: ${score.value}%`, 20, y);
+        y += 10;
+      });
+
+      y += 10;
+      doc.text('Personalized Tips:', 14, y);
+      y = addWrappedText(doc, tips.map(tip => `• ${tip}`), 20, y + 8);
+
+      y += 10;
+      doc.text('Transcript:', 14, y);
+      const transcript = [
+        'Tell me about yourself.',
+        'I am a software engineer with 3 years of experience.',
+        'My communication could be clearer when explaining complex topics.',
+        'The role interests me because it aligns well with my skills and career goals.'
+      ];
+      addWrappedText(doc, transcript, 20, y + 8);
+
+      doc.save('MockMate_Feedback_Report.pdf');
+    });
+
+    document.getElementById('generateBasicPdfBtn').addEventListener('click', () => {
+      const doc = new jsPDF();
+
+      doc.setFontSize(18);
+      doc.text('Interview Feedback Report', 14, 20);
+      doc.setFontSize(12);
+      doc.text('Candidate: John Doe', 14, 35);
+      doc.text(`Date: ${new Date().toLocaleDateString()}`, 14, 43);
+
+      doc.setFontSize(14);
+      doc.text('Score Breakdown:', 14, 60);
+
+      const basicScores = [
+        { label: 'Communication Clarity', value: '75%' },
+        { label: 'Confidence', value: '68%' },
+        { label: 'Content Quality', value: '80%' },
+        { label: 'Body Language', value: '60%' }
+      ];
+
+      let y = 70;
+      basicScores.forEach(score => {
+        doc.text(`${score.label}: ${score.value}`, 20, y);
+        y += 8;
+      });
+
+      y += 10;
+      doc.text('Transcript Highlights & Suggestions:', 14, y);
+      const highlights = [
+        'Area to Improve: Needs to clearly articulate technical concepts.',
+        'Suggestion: Practice structuring answers in the STAR format.',
+        'Observation: Shows good enthusiasm but occasionally hesitates.',
+        'Tip: Work on pacing and avoid filler words like “um” and “uh”.'
+      ];
+      y = addWrappedText(doc, highlights, 20, y + 8);
+
+      y += 5;
+      doc.text('Personalized Tips:', 14, y);
+      y = addWrappedText(doc, tips.map(tip => `• ${tip}`), 20, y + 8);
+
+      y += 5;
+      doc.text('Next Steps:', 14, y);
+      const nextSteps = [
+        'Schedule more mock interviews focusing on technical questions.',
+        'Review feedback after each session to track improvement.'
+      ];
+      addWrappedText(doc, nextSteps.map(s => `- ${s}`), 20, y + 8);
+
+      doc.save('Basic_AI_Feedback_Report_JohnDoe.pdf');
+    });
+
+    document.getElementById('shareMentorBtn').addEventListener('click', () => {
+      alert('Feedback report sent to your mentor!');
+      // Integrate backend API or email service here
+    });
+  </script>
+  <script src="js/nev.js"></script>
+</body>
+</html>

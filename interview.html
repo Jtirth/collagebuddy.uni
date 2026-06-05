@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" />
+    <title>Interview Prep - Study Buddy</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            /* Light Mode Variables */
+            --bg-body: #FAFAFA;
+            --bg-card: #FFFFFF;
+            --text-primary: #0F172A;
+            --text-secondary: #64748B;
+            --accent: #2563EB;
+            --accent-light: #EFF6FF;
+            --success: #10B981;
+            --border: #E2E8F0;
+
+            /* Sidebar Variables */
+            --sidebar-width-collapsed: 80px;
+            --sidebar-width-expanded: 260px;
+
+            /* 3D Effects */
+            --glass-bg: rgba(255, 255, 255, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.3);
+            --glass-blur: 20px;
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.1), 0 2px 8px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.12), 0 4px 16px rgba(0, 0, 0, 0.08);
+            --shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.15), 0 8px 24px rgba(0, 0, 0, 0.1);
+            --shadow-2xl: 0 24px 64px rgba(0, 0, 0, 0.2), 0 12px 32px rgba(0, 0, 0, 0.15);
+            --gradient-mesh: radial-gradient(at 40% 20%, hsla(217, 100%, 70%, 0.3) 0px, transparent 50%),
+                radial-gradient(at 80% 0%, hsla(189, 100%, 70%, 0.3) 0px, transparent 50%),
+                radial-gradient(at 0% 50%, hsla(355, 100%, 85%, 0.3) 0px, transparent 50%);
+        }
+
+        body.dark-mode {
+            /* Dark Mode Variables */
+            --bg-body: #0F172A;
+            --bg-card: #1E293B;
+            --text-primary: #F8FAFC;
+            --text-secondary: #94A3B8;
+            --accent-light: #334155;
+            --border: #334155;
+
+            /* 3D Effects - Dark Mode */
+            --glass-bg: rgba(30, 41, 59, 0.5);
+            --glass-border: rgba(148, 163, 184, 0.2);
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.4);
+            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.5), 0 2px 8px rgba(0, 0, 0, 0.3);
+            --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.6), 0 4px 16px rgba(0, 0, 0, 0.4);
+            --shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.7), 0 8px 24px rgba(0, 0, 0, 0.5);
+            --shadow-2xl: 0 24px 64px rgba(0, 0, 0, 0.8), 0 12px 32px rgba(0, 0, 0, 0.6);
+        }
+
+        body {
+            background: var(--bg-body);
+            background-image: var(--gradient-mesh);
+            background-attachment: fixed;
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* 3D Utility Classes */
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(var(--glass-blur));
+            -webkit-backdrop-filter: blur(var(--glass-blur));
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--shadow-lg);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .hover-3d {
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            will-change: transform;
+        }
+
+        .hover-3d:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: var(--shadow-2xl);
+        }
+
+        /* Content */
+        .content {
+            margin-left: var(--sidebar-width-collapsed);
+            padding: 40px;
+            width: 100%;
+            transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Interview Cards */
+        .interview-card {
+            padding: 32px;
+            border-radius: 16px;
+            cursor: pointer;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .interview-card-icon {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            opacity: 0.9;
+        }
+
+        .interview-card-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--text-primary);
+        }
+
+        .interview-card-description {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .btn-interview {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-interview:hover {
+            transform: scale(1.05);
+            box-shadow: var(--shadow-xl);
+            color: white;
+        }
+
+        .iframe-container {
+            width: 100%;
+            height: calc(100vh - 200px);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: var(--shadow-2xl);
+            margin-top: 24px;
+        }
+
+        .iframe-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+    </style>
+    <link rel="stylesheet" href="css/sidebar.css">
+    <link rel="stylesheet" href="css/mobile-responsive.css">
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <a href="index.html" class="brand">
+            <i class="fas fa-graduation-cap"></i>
+            <span>Study Buddy</span>
+        </a>
+        <nav class="nav-menu">
+            <a href="index.html" class="nav-item"> <i class="fas fa-home"></i> <span>Dashboard</span> </a>
+            <a href="courses.html" class="nav-item"> <i class="fas fa-book"></i> <span>Courses</span> </a>
+            <a href="collab.html" class="nav-item"> <i class="fas fa-users"></i> <span>Collaboration</span> </a>
+            <a href="calendar.html" class="nav-item"> <i class="fas fa-calendar"></i> <span>Calendar</span> </a>
+            <a href="todo.html" class="nav-item"> <i class="fas fa-check-square"></i> <span>Task Board</span> </a>
+            <a href="interview.html" class="nav-item active"> <i class="fas fa-user-tie"></i> <span>Interview</span>
+            </a>
+            <a href="resources.html" class="nav-item"> <i class="fas fa-folder-open"></i> <span>Resources</span> </a>
+        </nav>
+        <div class="sidebar-footer">
+            <nav class="nav-menu">
+                <a href="#" class="nav-item" onclick="toggleTheme()"> <i class="fas fa-moon" id="theme-icon"></i>
+                    <span>Light/Dark</span> </a>
+                <a href="about.html" class="nav-item"> <i class="fas fa-info-circle"></i> <span>About Us</span> </a>
+                <a href="profile.html" class="nav-item" id="account-link"> <i class="fas fa-user-circle"></i>
+                    <span>Account</span>
+                </a>
+            </nav>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="content">
+        <div id="interview-options">
+            <div class="mb-4">
+                <h1 style="font-weight: 700; margin-bottom: 8px;">Interview Preparation</h1>
+                <p style="color: var(--text-secondary); margin: 0;">Practice mock interviews and improve your skills</p>
+            </div>
+
+            <div class="row g-4">
+                <!-- MockMate Interview Hub -->
+                <div class="col-md-6">
+                    <div class="interview-card glass-card hover-3d"
+                        style="background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);">
+                        <div>
+                            <div class="interview-card-icon" style="color: #667eea;">
+                                <i class="fas fa-microphone-alt"></i>
+                            </div>
+                            <div class="interview-card-title">MockMate Interview Hub</div>
+                            <div class="interview-card-description">
+                                Practice mock interviews with AI feedback, track your progress, and improve your
+                                confidence with
+                                personalized tips and analytics.
+                            </div>
+                        </div>
+                        <button class="btn-interview" onclick="loadMockMate()">
+                            <i class="fas fa-play-circle me-2"></i>Start Mock Interview
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Interview Resources -->
+                <div class="col-md-6">
+                    <div class="interview-card glass-card hover-3d"
+                        style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(79, 70, 229, 0.1) 100%);">
+                        <div>
+                            <div class="interview-card-icon" style="color: #6366f1;">
+                                <i class="fas fa-book-reader"></i>
+                            </div>
+                            <div class="interview-card-title">Interview Resources</div>
+                            <div class="interview-card-description">
+                                Access curated interview questions, coding challenges, behavioral question guides, and
+                                company-specific
+                                preparation materials.
+                            </div>
+                        </div>
+                        <button class="btn-interview"
+                            style="background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);"
+                            onclick="window.location.href='resources.html?category=interview'">
+                            <i class="fas fa-folder-open me-2"></i>Browse Resources
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Coding Practice -->
+                <div class="col-md-6">
+                    <div class="interview-card glass-card hover-3d"
+                        style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(5, 150, 105, 0.1) 100%);">
+                        <div>
+                            <div class="interview-card-icon" style="color: #10b981;">
+                                <i class="fas fa-code"></i>
+                            </div>
+                            <div class="interview-card-title">Coding Practice</div>
+                            <div class="interview-card-description">
+                                Solve coding problems, practice data structures and algorithms, and prepare for
+                                technical interviews
+                                with real-world challenges.
+                            </div>
+                        </div>
+                        <button class="btn-interview"
+                            style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);"
+                            onclick="window.location.href='coding-practice.html'">
+                            <i class="fas fa-laptop-code me-2"></i>Start Coding
+                        </button>
+                    </div>
+                </div>
+
+                <!-- System Design -->
+                <div class="col-md-6">
+                    <div class="interview-card glass-card hover-3d"
+                        style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, rgba(217, 119, 6, 0.1) 100%);">
+                        <div>
+                            <div class="interview-card-icon" style="color: #f59e0b;">
+                                <i class="fas fa-project-diagram"></i>
+                            </div>
+                            <div class="interview-card-title">System Design</div>
+                            <div class="interview-card-description">
+                                Learn system design concepts, practice designing scalable systems, and prepare for
+                                senior-level
+                                technical interviews.
+                            </div>
+                        </div>
+                        <button class="btn-interview"
+                            style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);"
+                            onclick="window.location.href='system-design.html'">
+                            <i class="fas fa-sitemap me-2"></i>Learn Design
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MockMate iFrame Container (hidden by default) -->
+        <div id="mockmate-container" style="display: none;">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2 style="font-weight: 700;">MockMate Interview Hub</h2>
+                <button class="btn btn-secondary" onclick="closeMockMate()">
+                    <i class="fas fa-times me-2"></i>Close
+                </button>
+            </div>
+            <div class="iframe-container glass-card">
+                <iframe id="mockmate-iframe" src=""></iframe>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Theme Toggle
+        const themeIcon = document.getElementById('theme-icon');
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+            const isDark = document.body.classList.contains('dark-mode');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            updateThemeIcon(isDark);
+        }
+
+        function updateThemeIcon(isDark) {
+            if (!themeIcon) return;
+            if (isDark) {
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+            } else {
+                themeIcon.classList.remove('fa-sun');
+                themeIcon.classList.add('fa-moon');
+            }
+        }
+
+        // Load theme
+        document.addEventListener("DOMContentLoaded", () => {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                document.body.classList.add('dark-mode');
+                if (themeIcon) updateThemeIcon(true);
+            }
+        });
+
+        // Load MockMate
+        function loadMockMate() {
+            document.getElementById('interview-options').style.display = 'none';
+            document.getElementById('mockmate-container').style.display = 'block';
+            document.getElementById('mockmate-iframe').src = 'codewave-main/index.html';
+        }
+
+        // Close MockMate
+        function closeMockMate() {
+            document.getElementById('interview-options').style.display = 'block';
+            document.getElementById('mockmate-container').style.display = 'none';
+            document.getElementById('mockmate-iframe').src = '';
+        }
+    </script>
+
+    <!-- Firebase - Deferred -->
+    <script defer src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script defer src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script defer src="js/firebase-config.js"></script>
+    <script defer src="js/auth.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MockMate Login</title>
+  <link rel="stylesheet" href="css/login.css">
+  <link rel="stylesheet" href="css/nev.css">
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+<body style="background-image: url('image/login.jpg');">
+    <!-- Add this inside your login page container (e.g., near the top or bottom of the form) -->
+
+  <nav class="navbar">
+  <div class="nav-container">
+    <a href="index.html" class="nav-logo">MockMate</a>
+    
+    <div class="nav-toggle" id="navToggle">
+      ☰
+    </div>
+
+    <ul class="nav-menu" id="navMenu">
+      <li><a href="index.html" class="nav-link">Home</a></li>
+      <li><a href="login.html" class="nav-link">Login</a></li>
+      <li><a href="mock_interview.html" class="nav-link">Mock Interview</a></li>
+      <li><a href="feedback.html" class="nav-link">Feedback</a></li>
+      <li><a href="settings.html" class="nav-link">Settings</a></li>
+    </ul>
+  </div>
+</nav>
+
+
+  <div class="login-container">
+    <h2>Sign In to MockMate</h2>
+    <form id="loginForm">
+      <label for="email">Email:</label>
+      <input type="email" id="email" required>
+
+      <label for="password">Password:</label>
+      <input type="password" id="password" required>
+
+      <label for="role">Role:</label>
+      <select id="role" required>
+        <option value="student">Student</option>
+        <option value="mentor">Mentor</option>
+      </select>
+
+      <button type="submit">Sign In</button>
+    </form>
+    <div id="g_id_onload"
+         data-client_id="365741143742-g1as4q3687fins7if8i7cvgroq4s8mlg.apps.googleusercontent.com"
+         data-login_uri="http://localhost:3000/auth/google"
+         data-auto_prompt="false">
+    </div>
+    <div class="g_id_signin"
+         data-type="standard"
+         data-size="large"
+         data-theme="outline"
+         data-text="sign_in_with"
+         data-shape="rectangular"
+         data-logo_alignment="left">
+    </div>
+  </div>
+  <script src="js/login.js"></script>
+  <script src="js/nev.js"></script>
+</body>
+</html>

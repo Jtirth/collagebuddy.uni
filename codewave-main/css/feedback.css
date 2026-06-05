@@ -1,0 +1,130 @@
+* {
+  box-sizing: border-box;
+}
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #f4f7fc;
+  margin: 0;
+  padding: 20px;
+  color: #333;
+    background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  background: white;
+  border-radius: 12px;
+  padding: 30px 40px;
+  box-shadow: 0 12px 30px rgb(0 0 0 / 0.1);
+}
+
+header h1 {
+  text-align: center;
+  margin-bottom: 30px;
+  color: #2e3a59;
+}
+
+h2 {
+  color: #4169e1;
+  margin-bottom: 15px;
+  border-bottom: 2px solid #4169e1;
+  padding-bottom: 8px;
+}
+
+.score-breakdown {
+  margin-bottom: 40px;
+}
+
+.score-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.score-item label {
+  flex: 1 0 180px;
+  font-weight: 600;
+}
+
+progress {
+  flex-grow: 1;
+  height: 18px;
+  border-radius: 9px;
+  appearance: none;
+  margin-right: 15px;
+  overflow: hidden;
+  background-color: #ddd;
+}
+
+progress::-webkit-progress-bar {
+  background-color: #ddd;
+  border-radius: 9px;
+}
+
+progress::-webkit-progress-value {
+  background-color: #4169e1;
+  border-radius: 9px;
+}
+
+.score-value {
+  width: 50px;
+  font-weight: 600;
+  color: #4169e1;
+  text-align: right;
+}
+
+.transcript-section {
+  margin-bottom: 40px;
+  line-height: 1.5;
+}
+
+.transcript p {
+  margin-bottom: 10px;
+}
+
+.highlight-weakness {
+  background-color: #ffd6d6;
+  color: #b00020;
+  padding: 2px 6px;
+  border-radius: 3px;
+}
+
+.highlight-suggestion {
+  background-color: #e0f2ff;
+  color: #135ba1;
+  padding: 2px 6px;
+  border-radius: 3px;
+}
+
+.tips-section {
+  margin-bottom: 40px;
+}
+
+#tipsList {
+  list-style-type: disc;
+  padding-left: 20px;
+  font-size: 1.1rem;
+}
+
+.actions {
+  text-align: center;
+}
+
+.actions button {
+  background-color: #4169e1;
+  color: white;
+  border: none;
+  padding: 12px 28px;
+  font-size: 1rem;
+  margin: 10px 15px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  box-shadow: 0 6px 12px rgb(65 105 225 / 0.6);
+}
+
+.actions button:hover {
+  background-color: #274bb5;
+}

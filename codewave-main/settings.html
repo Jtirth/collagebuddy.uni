@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MockMate - Settings</title>
+  <link rel="stylesheet" href="css/nev.css">
+  <style>
+    /* Basic styling */
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f0f4f8;
+      margin: 0;
+      padding: 40px 20px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+        background-size: cover;
+  background-repeat: no-repeat;
+    }
+    .container {
+      background-color: #fff;
+      max-width: 480px;
+      width: 100%;
+      border-radius: 12px;
+      padding: 30px 40px;
+      box-shadow: 0 8px 24px rgb(0 0 0 / 0.1);
+        margin-top: 6%;
+    }
+    h1 {
+      margin-bottom: 24px;
+      color: #2a3f77;
+      text-align: center;
+    }
+    label {
+      font-weight: 600;
+      color: #3a3a3a;
+      display: block;
+      margin-top: 20px;
+      margin-bottom: 8px;
+    }
+    select, .options-group {
+      width: 100%;
+    }
+    select {
+      padding: 10px 12px;
+      font-size: 1rem;
+      border-radius: 8px;
+      border: 1.8px solid #bfc7d7;
+      background-color: #fafafa;
+      cursor: pointer;
+      transition: border-color 0.25s;
+    }
+    select:focus {
+      border-color: #4169e1;
+      outline: none;
+      background-color: white;
+    }
+    .options-group {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .option-item {
+      flex: 1 1 45%;
+      background: #eef2f6;
+      border-radius: 8px;
+      padding: 12px 16px;
+      cursor: pointer;
+      user-select: none;
+      text-align: center;
+      font-weight: 600;
+      border: 2px solid transparent;
+      transition: background-color 0.3s, border-color 0.3s;
+    }
+    .option-item.selected {
+      background-color: #4169e1;
+      color: white;
+      border-color: #0f52ba;
+    }
+    .toggle-setting {
+      display: flex;
+      align-items: center;
+      margin-top: 20px;
+    }
+    .toggle-setting label {
+      flex-grow: 1;
+      font-weight: 600;
+      color: #3a3a3a;
+      cursor: pointer;
+    }
+    .toggle-switch {
+      position: relative;
+      width: 50px;
+      height: 26px;
+    }
+    .toggle-switch input[type="checkbox"] {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: #ccc;
+      border-radius: 15px;
+      transition: 0.4s;
+    }
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 20px;
+      width: 20px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      border-radius: 50%;
+      transition: 0.4s;
+    }
+    input:checked + .slider {
+      background-color: #4169e1;
+    }
+    input:checked + .slider:before {
+      transform: translateX(24px);
+    }
+    button {
+      margin-top: 30px;
+      width: 100%;
+      padding: 14px 0;
+      font-size: 1.1rem;
+      color: white;
+      background-color: #4169e1;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: 700;
+      box-shadow: 0 6px 16px rgb(65 105 225 / 0.6);
+      transition: background-color 0.3s;
+    }
+    button:hover {
+      background-color: #274bb5;
+    }
+    @media (max-width: 400px) {
+      .option-item {
+        flex: 1 1 100%;
+      }
+    }
+  </style>
+</head>
+<body style="background-image: url('image/finaall.jpg');">
+<nav class="navbar">
+  <div class="nav-container">
+    <a href="index.html" class="nav-logo">MockMate</a>
+    
+    <div class="nav-toggle" id="navToggle">
+      ☰
+    </div>
+
+    <ul class="nav-menu" id="navMenu">
+      <li><a href="index.html" class="nav-link">Home</a></li>
+      <li><a href="login.html" class="nav-link">Login</a></li>
+      <li><a href="mock_interview.html" class="nav-link">Mock Interview</a></li>
+      <li><a href="feedback.html" class="nav-link">Feedback</a></li>
+      <li><a href="settings.html" class="nav-link">Settings</a></li>
+    </ul>
+  </div>
+</nav>
+
+
+  <div class="container">
+    <h1>Interview Settings</h1>
+
+    <!-- Interview Type -->
+    <label>Choose Interview Type:</label>
+    <div id="interviewTypeGroup" class="options-group" role="radiogroup" aria-label="Choose Interview Type">
+      <div tabindex="0" class="option-item selected" role="radio" aria-checked="true" data-value="behavioral">Behavioral</div>
+      <div tabindex="0" class="option-item" role="radio" aria-checked="false" data-value="technical">Technical (CS, Marketing, etc.)</div>
+      <div tabindex="0" class="option-item" role="radio" aria-checked="false" data-value="hr">HR Round</div>
+    </div>
+
+    <!-- Difficulty -->
+    <label for="difficultySelect">Set Difficulty:</label>
+    <select id="difficultySelect" name="difficulty">
+      <option value="easy">Easy</option>
+      <option value="medium" selected>Medium</option>
+      <option value="hard">Hard</option>
+    </select>
+
+    <!-- Duration -->
+    <label for="timeSelect">Choose Time (minutes):</label>
+    <select id="timeSelect" name="time">
+      <option value="5">5</option>
+      <option value="10" selected>10</option>
+      <option value="20">20</option>
+    </select>
+
+    <!-- Camera toggle -->
+    <div class="toggle-setting">
+      <label for="cameraToggle">Enable Camera</label>
+      <div class="toggle-switch">
+        <input type="checkbox" id="cameraToggle" checked />
+        <span class="slider"></span>
+      </div>
+    </div>
+
+    <!-- Microphone toggle -->
+    <div class="toggle-setting">
+      <label for="micToggle">Enable Microphone</label>
+      <div class="toggle-switch">
+        <input type="checkbox" id="micToggle" checked />
+        <span class="slider"></span>
+      </div>
+    </div>
+
+    <button id="saveSettingsBtn" type="button">Save Settings</button>
+  </div>
+
+  <script>
+    // Handle selection for interview type options
+    const interviewTypeGroup = document.getElementById('interviewTypeGroup');
+    const options = interviewTypeGroup.querySelectorAll('.option-item');
+
+    options.forEach(option => {
+      option.addEventListener('click', () => {
+        selectInterviewType(option);
+      });
+      option.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          selectInterviewType(option);
+        }
+      });
+    });
+
+    function selectInterviewType(selectedOption) {
+      options.forEach(opt => {
+        opt.classList.remove('selected');
+        opt.setAttribute('aria-checked', 'false');
+      });
+      selectedOption.classList.add('selected');
+      selectedOption.setAttribute('aria-checked', 'true');
+    }
+
+    // Save settings button handler
+    document.getElementById('saveSettingsBtn').addEventListener('click', () => {
+      // Collect settings
+      const selectedType = interviewTypeGroup.querySelector('.option-item.selected').getAttribute('data-value');
+      const difficulty = document.getElementById('difficultySelect').value;
+      const time = document.getElementById('timeSelect').value;
+      const cameraEnabled = document.getElementById('cameraToggle').checked;
+      const micEnabled = document.getElementById('micToggle').checked;
+
+      // Here you can send these settings to backend, localStorage, or use them as needed
+      const settings = {
+        interviewType: selectedType,
+        difficulty: difficulty,
+        timeMinutes: Number(time),
+        cameraEnabled: cameraEnabled,
+        micEnabled: micEnabled
+      };
+
+      // Example - store in localStorage
+      localStorage.setItem('mockmateInterviewSettings', JSON.stringify(settings));
+
+      alert('Settings saved successfully!');
+      console.log('Saved Settings:', settings);
+    });
+
+    // Optionally load saved settings on page load
+    window.addEventListener('DOMContentLoaded', () => {
+      const savedSettings = JSON.parse(localStorage.getItem('mockmateInterviewSettings'));
+      if (savedSettings) {
+        // Set Interview Type
+        options.forEach(opt => {
+          if (opt.getAttribute('data-value') === savedSettings.interviewType) {
+            selectInterviewType(opt);
+          }
+        });
+        // Set Difficulty
+        document.getElementById('difficultySelect').value = savedSettings.difficulty;
+        // Set Time
+        document.getElementById('timeSelect').value = savedSettings.timeMinutes.toString();
+        // Set toggles
+        document.getElementById('cameraToggle').checked = savedSettings.cameraEnabled;
+        document.getElementById('micToggle').checked = savedSettings.micEnabled;
+      }
+    });
+  </script>
+   <script src="js/nev.js"></script>
+</body>
+</html>

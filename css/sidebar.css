@@ -1,0 +1,205 @@
+/* Sidebar Styles - Unified for all pages */
+
+:root {
+    --sidebar-width-collapsed: 80px;
+    --sidebar-width-expanded: 260px;
+}
+
+/* Dynamic Sidebar */
+.sidebar {
+    width: var(--sidebar-width-collapsed);
+    height: 100vh;
+    background-color: var(--bg-card);
+    border-right: 1px solid var(--border);
+    position: fixed;
+    left: 0;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    padding: 24px 16px;
+    z-index: 1000;
+    overflow: hidden;
+    white-space: nowrap;
+    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sidebar:hover {
+    width: var(--sidebar-width-expanded);
+    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.1);
+    padding: 24px;
+}
+
+/* Brand */
+.brand {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 40px;
+    text-decoration: none;
+    height: 40px;
+}
+
+.brand i {
+    font-size: 1.5rem;
+    min-width: 24px;
+    text-align: center;
+}
+
+.brand span {
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.sidebar:hover .brand span {
+    opacity: 1;
+}
+
+/* Navigation Menu */
+.nav-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex: 1;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 12px;
+    color: var(--text-secondary);
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    height: 48px;
+}
+
+.nav-item:hover,
+.nav-item.active {
+    background-color: var(--accent-light);
+    color: var(--accent);
+}
+
+.nav-item i {
+    font-size: 1.25rem;
+    min-width: 24px;
+    text-align: center;
+}
+
+.nav-item span {
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.sidebar:hover .nav-item span {
+    opacity: 1;
+}
+
+/* Sidebar Footer */
+.sidebar-footer {
+    border-top: 1px solid var(--border);
+    padding-top: 20px;
+    margin-top: auto;
+}
+
+/* Mobile Responsive - Sidebar */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 100%;
+        height: auto;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        top: auto;
+        flex-direction: row;
+        padding: 12px 8px;
+        border-right: none;
+        border-top: 1px solid var(--border);
+        z-index: 1001;
+        overflow-x: auto;
+        overflow-y: hidden;
+    }
+
+    .sidebar:hover {
+        width: 100%;
+        padding: 12px 8px;
+        box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.1);
+    }
+
+    .brand {
+        display: none;
+    }
+
+    .nav-menu {
+        flex-direction: row;
+        gap: 4px;
+        overflow-x: auto;
+        width: 100%;
+    }
+
+    .nav-item {
+        flex-direction: column;
+        gap: 4px;
+        padding: 8px 12px;
+        min-width: 60px;
+        height: auto;
+        font-size: 0.75rem;
+    }
+
+    .nav-item i {
+        font-size: 1.25rem;
+    }
+
+    .nav-item span {
+        opacity: 1;
+        font-size: 0.7rem;
+        white-space: nowrap;
+    }
+
+    .sidebar-footer {
+        display: none;
+    }
+}
+
+/* Small Mobile */
+@media (max-width: 576px) {
+    .nav-item {
+        min-width: 50px;
+        padding: 6px 8px;
+    }
+
+    .nav-item i {
+        font-size: 1.1rem;
+    }
+
+    .nav-item span {
+        font-size: 0.65rem;
+    }
+}
+
+/* Tablet */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .sidebar {
+        width: var(--sidebar-width-collapsed);
+    }
+
+    .sidebar:hover {
+        width: 220px;
+    }
+}
+
+/* Landscape Mobile */
+@media (max-width: 896px) and (orientation: landscape) {
+    .sidebar {
+        height: 60px;
+        padding: 8px;
+    }
+
+    .nav-item {
+        padding: 6px 10px;
+    }
+}

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MockMate - Start Mock Interview</title>
+  <link rel="stylesheet" href="css/mock_interview.css" />
+  <link rel="stylesheet" href="css/nev.css">
+</head>
+<body style="background-image: url('image/finaall.jpg');">
+   <nav class="navbar">
+  <div class="nav-container">
+    <a href="index.html" class="nav-logo">MockMate</a>
+    
+    <div class="nav-toggle" id="navToggle">
+      ☰
+    </div>
+
+    <ul class="nav-menu" id="navMenu">
+      <li><a href="index.html" class="nav-link">Home</a></li>
+      <li><a href="login.html" class="nav-link">Login</a></li>
+      <li><a href="mock_interview.html" class="nav-link">Mock Interview</a></li>
+      <li><a href="feedback.html" class="nav-link">Feedback</a></li>
+      <li><a href="settings.html" class="nav-link">Settings</a></li>
+    </ul>
+  </div>
+</nav>
+
+
+  <div class="container">
+    <header>
+      <h1>Mock Interview</h1>
+    </header>
+
+    <section class="video-section">
+      <video id="webcam" autoplay muted playsinline></video>
+    </section>
+
+    <section class="question-section">
+      <h2>Question:</h2>
+      <p id="questionDisplay">Tell me about yourself</p>
+    </section>
+
+    <section class="input-toggle">
+      <label>
+        <input type="radio" name="inputMode" value="text" checked />
+        Text Interview
+      </label>
+      <label>
+        <input type="radio" name="inputMode" value="voice" />
+        Voice Interview
+      </label>
+    </section>
+
+    <section class="input-section">
+      <textarea id="textInput" placeholder="Type your answer here..."></textarea>
+      <button id="recordBtn" class="hidden" title="Start Recording">🎙️ Start Recording</button>
+      <p id="recordingStatus" class="status hidden">Recording...</p>
+    </section>
+
+    <section class="timer-section">
+      <div id="timer">00:00</div>
+    </section>
+
+    <section class="control-buttons">
+      <button id="repeatBtn" title="Repeat Question">🔁 Repeat Question</button>
+      <button id="skipBtn" title="Skip Question">⏭️ Skip</button>
+      <button id="endBtn" title="End Interview">❌ End Interview</button>
+    </section>
+  </div>
+
+  <script src="js/mock_interview.js"></script>
+   <script src="js/nev.js"></script>
+</body>
+</html>

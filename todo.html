@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Study Buddy - Task Board</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      /* Light Mode Variables */
+      --bg-body: #FAFAFA;
+      --bg-card: #FFFFFF;
+      --text-primary: #0F172A;
+      --text-secondary: #64748B;
+      --accent: #2563EB;
+      --accent-light: #EFF6FF;
+      --success: #10B981;
+      --border: #E2E8F0;
+
+      /* Sidebar Variables */
+      --sidebar-width-collapsed: 80px;
+      --sidebar-width-expanded: 260px;
+
+      /* 3D Effects */
+      --glass-bg: rgba(255, 255, 255, 0.7);
+      --glass-border: rgba(255, 255, 255, 0.3);
+      --glass-blur: 20px;
+      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+      --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.1), 0 2px 8px rgba(0, 0, 0, 0.06);
+      --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.12), 0 4px 16px rgba(0, 0, 0, 0.08);
+      --shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.15), 0 8px 24px rgba(0, 0, 0, 0.1);
+      --shadow-2xl: 0 24px 64px rgba(0, 0, 0, 0.2), 0 12px 32px rgba(0, 0, 0, 0.15);
+      --gradient-mesh: radial-gradient(at 40% 20%, hsla(217, 100%, 70%, 0.3) 0px, transparent 50%),
+        radial-gradient(at 80% 0%, hsla(189, 100%, 70%, 0.3) 0px, transparent 50%),
+        radial-gradient(at 0% 50%, hsla(355, 100%, 85%, 0.3) 0px, transparent 50%);
+
+      /* Compatibility Mappings */
+      --primary: var(--accent);
+      --text-main: var(--text-primary);
+      --text-muted: var(--text-secondary);
+      --secondary: var(--text-secondary);
+      --primary-hover: #1d4ed8;
+    }
+
+    body.dark-mode {
+      /* Dark Mode Variables */
+      --bg-body: #0F172A;
+      --bg-card: #1E293B;
+      --text-primary: #F8FAFC;
+      --text-secondary: #94A3B8;
+      --accent-light: #334155;
+      --border: #334155;
+
+      /* Dark Mode Mappings */
+      --text-main: var(--text-primary);
+      --text-muted: var(--text-secondary);
+    }
+
+    body {
+      background: var(--bg-body);
+      background-image: var(--gradient-mesh);
+      background-attachment: fixed;
+      color: var(--text-primary);
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    /* 3D Utility Classes */
+    .glass-card {
+      background: var(--glass-bg);
+      backdrop-filter: blur(var(--glass-blur));
+      -webkit-backdrop-filter: blur(var(--glass-blur));
+      border: 1px solid var(--glass-border);
+      box-shadow: var(--shadow-lg);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .hover-3d {
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      will-change: transform;
+    }
+
+    .hover-3d:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: var(--shadow-2xl);
+    }
+
+    @keyframes float {
+
+      0%,
+      100% {
+        transform: translateY(0px);
+      }
+
+      50% {
+        transform: translateY(-8px);
+      }
+    }
+
+
+
+    /* Dynamic Sidebar */
+    .sidebar {
+      width: var(--sidebar-width-collapsed);
+      height: 100vh;
+      background-color: var(--bg-card);
+      border-right: 1px solid var(--border);
+      position: fixed;
+      left: 0;
+      top: 0;
+      display: flex;
+      flex-direction: column;
+      padding: 24px 16px;
+      z-index: 1000;
+      overflow: hidden;
+      white-space: nowrap;
+      transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .sidebar:hover {
+      width: var(--sidebar-width-expanded);
+      box-shadow: 4px 0 24px rgba(0, 0, 0, 0.1);
+      padding: 24px;
+    }
+
+    .brand {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 40px;
+      text-decoration: none;
+      height: 40px;
+    }
+
+    .brand i {
+      font-size: 1.5rem;
+      min-width: 24px;
+      text-align: center;
+    }
+
+    .brand span {
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+
+    .sidebar:hover .brand span {
+      opacity: 1;
+    }
+
+    .nav-menu {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      flex: 1;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 12px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 500;
+      transition: all 0.2s ease;
+      justify-content: flex-start;
+      height: 48px;
+    }
+
+    .nav-item:hover,
+    .nav-item.active {
+      background-color: var(--accent-light);
+      color: var(--accent);
+    }
+
+    .nav-item i {
+      font-size: 1.25rem;
+      min-width: 24px;
+      text-align: center;
+      display: flex;
+      justify-content: center;
+    }
+
+    .nav-item span {
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+
+    .sidebar:hover .nav-item span {
+      opacity: 1;
+    }
+
+    .sidebar-footer {
+      border-top: 1px solid var(--border);
+      padding-top: 20px;
+      margin-top: auto;
+    }
+
+    /* Main Content */
+    .main-content {
+      margin-left: var(--sidebar-width-collapsed);
+      flex: 1;
+      padding: 40px;
+      max-width: 1200px;
+      transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .page-header {
+      margin-bottom: 32px;
+    }
+
+    .page-title {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+    }
+
+    .page-subtitle {
+      color: var(--text-secondary);
+    }
+
+    /* Todo Specific Styles */
+    .todo-container {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 32px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    }
+
+    .section-header {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 20px;
+      color: var(--text-primary);
+    }
+
+    .form-control,
+    .form-select {
+      border-color: var(--border);
+      padding: 10px 14px;
+      border-radius: 8px;
+      background-color: var(--bg-card);
+      /* Adapted */
+      color: var(--text-primary);
+      /* Adapted */
+    }
+
+    .form-control:focus,
+    .form-select:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+      background-color: var(--bg-card);
+      color: var(--text-primary);
+    }
+
+    .btn-primary {
+      background-color: var(--accent);
+      border: none;
+      padding: 10px 20px;
+      font-weight: 500;
+      border-radius: 8px;
+    }
+
+    .btn-primary:hover {
+      background-color: var(--primary-hover);
+    }
+
+    .priority-box span,
+    .status-box span {
+      padding: 6px 14px;
+      border-radius: 20px;
+      margin-right: 8px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      display: inline-block;
+      margin-bottom: 8px;
+      transition: opacity 0.2s;
+    }
+
+    .priority-box span:hover,
+    .status-box span:hover {
+      opacity: 0.8;
+    }
+
+    .list-group-item {
+      border: 1px solid var(--border);
+      margin-bottom: 8px;
+      border-radius: 8px !important;
+      padding: 16px;
+      background-color: var(--bg-card);
+      /* Adapted */
+      color: var(--text-primary);
+      /* Adapted */
+    }
+
+    #flowchartCanvas {
+      border: 2px dashed var(--border);
+      background: var(--bg-body);
+      /* Adapted */
+      width: 100%;
+      height: 400px;
+      margin-top: 20px;
+      cursor: crosshair;
+      border-radius: 8px;
+    }
+
+    .canvas-tools {
+      margin-top: 16px;
+    }
+
+    /* Utility colors override for badges to look better */
+    .bg-primary {
+      background-color: var(--accent) !important;
+    }
+
+    .bg-success {
+      background-color: var(--success) !important;
+    }
+
+    .bg-secondary {
+      background-color: var(--text-secondary) !important;
+    }
+  </style>
+  <link rel="stylesheet" href="css/sidebar.css">
+  <link rel="stylesheet" href="css/mobile-responsive.css">
+</head>
+
+<body>
+  <!-- Dynamic Sidebar -->
+  <aside class="sidebar">
+    <a href="index.html" class="brand">
+      <i class="fas fa-graduation-cap"></i>
+      <span>Study Buddy</span>
+    </a>
+    <nav class="nav-menu">
+      <a href="index.html" class="nav-item">
+        <i class="fas fa-home"></i> <span>Dashboard</span>
+      </a>
+      <a href="courses.html" class="nav-item">
+        <i class="fas fa-book"></i> <span>Courses</span>
+      </a>
+      <a href="collab.html" class="nav-item">
+        <i class="fas fa-users"></i> <span>Collaboration</span>
+      </a>
+      <a href="calendar.html" class="nav-item">
+        <i class="fas fa-calendar"></i> <span>Calendar</span>
+      </a>
+      <a href="todo.html" class="nav-item active">
+        <i class="fas fa-check-square"></i> <span>Task Board</span>
+      </a>
+      <a href="interview.html" class="nav-item">
+        <i class="fas fa-user-tie"></i> <span>Interview</span>
+      </a>
+      <a href="resources.html" class="nav-item">
+        <i class="fas fa-folder-open"></i> <span>Resources</span>
+      </a>
+    </nav>
+    <div class="sidebar-footer">
+      <nav class="nav-menu">
+        <a href="#" class="nav-item" onclick="toggleTheme()">
+          <i class="fas fa-moon" id="theme-icon"></i>
+          <span>Light/Dark</span>
+        </a>
+        <a href="about.html" class="nav-item">
+          <i class="fas fa-info-circle"></i> <span>About Us</span>
+        </a>
+        <a href="profile.html" class="nav-item" id="account-link">
+          <i class="fas fa-user-circle"></i> <span>Account</span>
+        </a>
+      </nav>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <header class="page-header" style="display: flex; justify-content: space-between; align-items: center;">
+      <div>
+        <h1 class="page-title">Task Board</h1>
+        <p class="page-subtitle">Manage your tasks and visualize your workflows.</p>
+      </div>
+      <button class="btn btn-primary" onclick="downloadTodoAsPDF()" style="height: fit-content;">
+        <i class="fas fa-file-pdf me-2"></i>Download PDF
+      </button>
+    </header>
+
+    <div class="todo-container">
+      <h2 class="section-header"><i class="fas fa-list-ul me-2"></i>Tasks</h2>
+
+      <div class="row g-2 mb-4">
+        <div class="col-md-3">
+          <input type="text" id="todoInput" placeholder="Task title" class="form-control">
+        </div>
+        <div class="col-md-3">
+          <input type="text" id="todoDesc" placeholder="Description" class="form-control">
+        </div>
+        <div class="col-md-2">
+          <select id="prioritySelect" class="form-select">
+            <option value="High">High</option>
+            <option value="Medium">Medium</option>
+            <option value="Low">Low</option>
+          </select>
+        </div>
+        <div class="col-md-2">
+          <select id="statusSelect" class="form-select">
+            <option value="Pending">Pending</option>
+            <option value="Running">Running</option>
+            <option value="Completed">Completed</option>
+          </select>
+        </div>
+        <div class="col-md-2">
+          <button class="btn btn-primary w-100" onclick="addTask()"><i class="fas fa-plus"></i> Add</button>
+        </div>
+        <div class="col-md-12 mt-2">
+          <input type="file" id="fileInput" class="form-control">
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <div class="priority-box">
+          <small class="text-uppercase text-muted fw-bold" style="font-size: 0.75rem;">Priority:</small>
+          <span class="badge bg-danger" onclick="filterTasks('High')">High</span>
+          <span class="badge bg-warning text-dark" onclick="filterTasks('Medium')">Medium</span>
+          <span class="badge bg-secondary" onclick="filterTasks('Low')">Low</span>
+          <span class="badge bg-dark" onclick="filterTasks('All')">All</span>
+        </div>
+        <div class="status-box">
+          <small class="text-uppercase text-muted fw-bold" style="font-size: 0.75rem;">Status:</small>
+          <span class="badge bg-primary" onclick="filterStatus('Pending')">Pending</span>
+          <span class="badge bg-info text-dark" onclick="filterStatus('Running')">Running</span>
+          <span class="badge bg-success" onclick="filterStatus('Completed')">Completed</span>
+          <span class="badge bg-dark" onclick="filterStatus('All')">All</span>
+        </div>
+      </div>
+
+      <ul id="todoItems" class="list-group mb-4"></ul>
+      <button class="btn btn-outline-secondary" onclick="exportToPDF()"><i class="fas fa-file-pdf me-2"></i> Export
+        List</button>
+    </div>
+
+    <div class="todo-container mt-4">
+      <h2 class="section-header"><i class="fas fa-project-diagram me-2"></i>Flowchart Canvas</h2>
+      <canvas id="flowchartCanvas"></canvas>
+      <div class="canvas-tools">
+        <button class="btn btn-outline-secondary btn-sm" onclick="clearCanvas()">Clear</button>
+        <button class="btn btn-outline-success btn-sm" onclick="downloadCanvas()">Download</button>
+        <input type="file" accept="image/*" onchange="uploadImage(event)"
+          class="form-control form-control-sm mt-2 d-inline-block w-auto ms-2" />
+      </div>
+    </div>
+
+    <div class="alert alert-info mt-4">
+      <h5 class="alert-heading"><i class="fas fa-lightbulb me-2"></i>Productivity Tips</h5>
+      <ul class="mb-0 ps-3">
+        <li><strong>80/20 Rule:</strong> Focus on the 20% tasks that produce 80% of results.</li>
+        <li><strong>Pomodoro:</strong> 25 min work / 5 min break cycles.</li>
+        <li><strong>Eisenhower Matrix:</strong> Prioritize urgent vs important.</li>
+      </ul>
+    </div>
+
+  </main>
+
+  <!-- Modal -->
+  <div class="modal fade" id="fileModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">📎 File Preview</h5>
+          <button class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body text-center">
+          <img id="modalImage" class="img-fluid" style="max-height: 80vh;" />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script>
+    let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+    let currentPriorityFilter = 'All';
+    let currentStatusFilter = 'All';
+
+    function saveTasks() {
+      localStorage.setItem("tasks", JSON.stringify(tasks));
+    }
+
+    function showProfile() { alert('Profile Settings'); }
+
+    // Theme Toggle Logic
+    const themeIcon = document.getElementById('theme-icon');
+
+    function toggleTheme() {
+      document.body.classList.toggle('dark-mode');
+      const isDark = document.body.classList.contains('dark-mode');
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+      updateThemeIcon(isDark);
+      // Redraw canvas if needed or handle color changes
+    }
+
+    function updateThemeIcon(isDark) {
+      if (isDark) {
+        themeIcon.classList.remove('fa-moon');
+        themeIcon.classList.add('fa-sun');
+      } else {
+        themeIcon.classList.remove('fa-sun');
+        themeIcon.classList.add('fa-moon');
+      }
+    }
+
+    // Check Local Storage on Load
+    document.addEventListener("DOMContentLoaded", () => {
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme === 'dark') {
+        document.body.classList.add('dark-mode');
+        if (themeIcon) updateThemeIcon(true);
+      }
+    });
+
+    function addTask() {
+      const title = todoInput.value.trim();
+      const description = todoDesc.value.trim();
+      const priority = prioritySelect.value;
+      const status = statusSelect.value;
+      const file = fileInput.files[0];
+      const fileName = file ? file.name : '';
+      const fileURL = file ? URL.createObjectURL(file) : '';
+      if (title) {
+        tasks.push({ title, description, priority, status, file: fileName, fileURL });
+        saveTasks();
+        todoInput.value = ""; todoDesc.value = ""; fileInput.value = "";
+        renderTasks();
+      }
+    }
+
+    function deleteTask(index) {
+      tasks.splice(index, 1);
+      saveTasks();
+      renderTasks();
+    }
+
+    function updateTask(index) {
+      const t = tasks[index];
+      t.title = prompt("Title:", t.title) || t.title;
+      t.description = prompt("Description:", t.description) || t.description;
+      t.priority = prompt("Priority:", t.priority) || t.priority;
+      t.status = prompt("Status:", t.status) || t.status;
+      saveTasks();
+      renderTasks();
+    }
+
+    function filterTasks(priority) {
+      currentPriorityFilter = priority;
+      renderTasks();
+    }
+    function filterStatus(status) {
+      currentStatusFilter = status;
+      renderTasks();
+    }
+
+    function renderTasks() {
+      const list = document.getElementById("todoItems");
+      list.innerHTML = "";
+      tasks.forEach((t, i) => {
+        const match = (currentPriorityFilter === 'All' || t.priority === currentPriorityFilter) &&
+          (currentStatusFilter === 'All' || t.status === currentStatusFilter);
+        if (match) {
+          const li = document.createElement("li");
+          li.className = "list-group-item d-flex justify-content-between align-items-center";
+          // Colored borders based on priority
+          if (t.priority === 'High') li.style.borderLeft = "4px solid #dc3545";
+          else if (t.priority === 'Medium') li.style.borderLeft = "4px solid #ffc107";
+          else li.style.borderLeft = "4px solid #6c757d";
+
+          li.innerHTML = `
+            <div onclick='${t.file ? `showFileModal("${t.fileURL}")` : ''}' style='cursor: ${t.file ? 'pointer' : 'default'}; flex: 1;'>
+              <div class="d-flex align-items-center mb-1">
+                  <strong>${t.title}</strong>
+                  <span class="badge bg-light text-dark border ms-2">${t.priority}</span>
+                  <span class="badge bg-light text-dark border ms-1">${t.status}</span>
+              </div>
+              <small class="text-muted d-block">${t.description}</small>
+              ${t.file ? `<div class='mt-1 text-primary'><i class="fas fa-paperclip"></i> ${t.file}</div>` : ''}
+            </div>
+            <div class='btn-group'>
+              <button class='btn btn-sm btn-outline-info' onclick='updateTask(${i})'><i class="fas fa-edit"></i></button>
+              <button class='btn btn-sm btn-outline-danger' onclick='deleteTask(${i})'><i class="fas fa-trash"></i></button>
+            </div>`;
+          list.appendChild(li);
+        }
+      });
+    }
+
+    function showFileModal(src) {
+      document.getElementById("modalImage").src = src;
+      new bootstrap.Modal(document.getElementById("fileModal")).show();
+    }
+
+    const canvas = document.getElementById("flowchartCanvas");
+    // Resize canvas to match display size
+    canvas.width = canvas.parentElement.offsetWidth;
+    canvas.height = 400;
+
+    const ctx = canvas.getContext("2d");
+    let drawing = false;
+
+    // Fix: correct coordinate calculation
+    function getMousePos(canvas, evt) {
+      var rect = canvas.getBoundingClientRect();
+      return {
+        x: evt.clientX - rect.left,
+        y: evt.clientY - rect.top
+      };
+    }
+
+    canvas.addEventListener("mousedown", (e) => {
+      drawing = true;
+      ctx.beginPath();
+      const pos = getMousePos(canvas, e);
+      ctx.moveTo(pos.x, pos.y);
+    });
+    canvas.addEventListener("mouseup", () => {
+      drawing = false;
+      ctx.beginPath();
+    });
+    canvas.addEventListener("mouseout", () => drawing = false);
+
+    canvas.addEventListener("mousemove", e => {
+      if (!drawing) return;
+      ctx.lineWidth = 2;
+      ctx.lineCap = "round";
+      ctx.strokeStyle = "#1e293b";
+
+      const pos = getMousePos(canvas, e);
+      ctx.lineTo(pos.x, pos.y);
+      ctx.stroke();
+      // ctx.beginPath(); // Removing this to allow continuous lines
+      // ctx.moveTo(pos.x, pos.y);
+    });
+
+    function clearCanvas() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.beginPath();
+    }
+    function downloadCanvas() {
+      const a = document.createElement('a');
+      a.download = 'flowchart.png';
+      a.href = canvas.toDataURL();
+      a.click();
+    }
+    function uploadImage(e) {
+      const f = e.target.files[0];
+      const r = new FileReader();
+      r.onload = ev => {
+        const img = new Image();
+        img.onload = () => ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        img.src = ev.target.result;
+      };
+      if (f) r.readAsDataURL(f);
+    }
+
+    async function exportToPDF() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      doc.setFont("helvetica", "bold");
+      doc.text("Study Buddy Task List", 10, 10);
+      doc.setFont("helvetica", "normal");
+
+      let y = 20;
+      tasks.forEach((t, i) => {
+        doc.text(`${i + 1}. ${t.title} [${t.priority}, ${t.status}]`, 10, y);
+        doc.setFontSize(10);
+        doc.setTextColor(100);
+        doc.text(`   ${t.description}`, 10, y + 6);
+        doc.setFontSize(16);
+        doc.setTextColor(0);
+
+        y += 15;
+        if (y > 270) { doc.addPage(); y = 20; }
+      });
+      doc.save("study-buddy-tasks.pdf");
+    }
+
+    // Initial render
+    renderTasks();
+
+    // Handle resize
+    window.addEventListener('resize', () => {
+      // Optionally save canvas content before resizing
+      // For now just keeping layout responsive
+    });
+  </script>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+  <script src="js/firebase-config.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/pdf-generator.js"></script>
+
+</body>
+
+</html>

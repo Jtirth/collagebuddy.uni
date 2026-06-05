@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Study Buddy - Collaboration</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/sidebar.css">
+  <link rel="stylesheet" href="css/mobile-responsive.css">
+  <style>
+    :root {
+      --bg-body: #FAFAFA;
+      --bg-card: #FFFFFF;
+      --text-primary: #0F172A;
+      --text-secondary: #64748B;
+      --accent: #2563EB;
+      --accent-light: #EFF6FF;
+      --success: #10B981;
+      --border: #E2E8F0;
+    }
+
+    body.dark-mode {
+      --bg-body: #0F172A;
+      --bg-card: #1E293B;
+      --text-primary: #F8FAFC;
+      --text-secondary: #94A3B8;
+      --accent-light: #334155;
+      --border: #334155;
+    }
+
+    body {
+      background: var(--bg-body);
+      color: var(--text-primary);
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 0;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    .content {
+      margin-left: 80px;
+      padding: 40px;
+      max-width: 1400px;
+    }
+
+    .page-header h2 {
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+    }
+
+    .page-header p {
+      color: var(--text-secondary);
+    }
+
+    .card-box {
+      background: var(--bg-card);
+      border-radius: 12px;
+      padding: 24px;
+      border: 1px solid var(--border);
+      margin-bottom: 24px;
+    }
+
+    .card-box h5 {
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 16px;
+    }
+
+    .feature-item {
+      padding: 16px;
+      background: var(--accent-light);
+      border-radius: 8px;
+      margin-bottom: 12px;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      border: 2px solid transparent;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .feature-item::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(37, 99, 235, 0.1), transparent);
+      transition: left 0.5s;
+    }
+
+    .feature-item:hover::before {
+      left: 100%;
+    }
+
+    .feature-item:hover {
+      transform: translateY(-4px) scale(1.02);
+      box-shadow: 0 8px 24px rgba(37, 99, 235, 0.2);
+      border-color: var(--accent);
+      background: var(--bg-card);
+    }
+
+    .feature-item:active {
+      transform: translateY(-2px) scale(1.01);
+    }
+
+    .feature-item h6 {
+      color: var(--text-primary);
+      margin-bottom: 8px;
+      transition: color 0.3s;
+    }
+
+    .feature-item:hover h6 {
+      color: var(--accent);
+    }
+
+    .feature-item p {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      margin: 0;
+    }
+
+    .feature-badge {
+      display: inline-block;
+      background: var(--accent);
+      color: white;
+      font-size: 0.7rem;
+      padding: 4px 8px;
+      border-radius: 12px;
+      margin-left: 8px;
+      font-weight: 600;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <a href="index.html" class="brand">
+      <i class="fas fa-graduation-cap"></i>
+      <span>Study Buddy</span>
+    </a>
+    <nav class="nav-menu">
+      <a href="index.html" class="nav-item">
+        <i class="fas fa-home"></i> <span>Dashboard</span>
+      </a>
+      <a href="courses.html" class="nav-item">
+        <i class="fas fa-book"></i> <span>Courses</span>
+      </a>
+      <a href="collab.html" class="nav-item active">
+        <i class="fas fa-users"></i> <span>Collaboration</span>
+      </a>
+      <a href="calendar.html" class="nav-item">
+        <i class="fas fa-calendar"></i> <span>Calendar</span>
+      </a>
+      <a href="todo.html" class="nav-item">
+        <i class="fas fa-check-square"></i> <span>Task Board</span>
+      </a>
+      <a href="interview.html" class="nav-item">
+        <i class="fas fa-user-tie"></i> <span>Interview</span>
+      </a>
+      <a href="resources.html" class="nav-item">
+        <i class="fas fa-folder-open"></i> <span>Resources</span>
+      </a>
+    </nav>
+    <div class="sidebar-footer">
+      <nav class="nav-menu">
+        <a href="#" class="nav-item" onclick="toggleTheme()">
+          <i class="fas fa-moon" id="theme-icon"></i>
+          <span>Light/Dark</span>
+        </a>
+        <a href="about.html" class="nav-item">
+          <i class="fas fa-info-circle"></i> <span>About Us</span>
+        </a>
+        <a href="profile.html" class="nav-item">
+          <i class="fas fa-user-circle"></i> <span>Account</span>
+        </a>
+      </nav>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="content">
+    <div class="page-header" style="margin-bottom: 30px;">
+      <h2>Collaboration Hub</h2>
+      <p>Connect with friends and study together</p>
+    </div>
+
+    <!-- Coming Soon Section -->
+    <div class="card-box">
+      <h5><i class="fas fa-users me-2"></i>Collaboration Features</h5>
+      <p class="text-muted mb-4">Work together with your study buddies and achieve more!</p>
+
+      <div class="feature-item" onclick="showFeatureAlert('Friend Connections')">
+        <h6><i class="fas fa-user-friends me-2"></i>Friend Connections<span class="feature-badge">Coming Soon</span>
+        </h6>
+        <p>Add friends and build your study network</p>
+      </div>
+
+      <div class="feature-item" onclick="showFeatureAlert('Study Groups')">
+        <h6><i class="fas fa-users-cog me-2"></i>Study Groups<span class="feature-badge">Coming Soon</span></h6>
+        <p>Create and join study groups for collaborative learning</p>
+      </div>
+
+      <div class="feature-item" onclick="showFeatureAlert('Shared Calendar')">
+        <h6><i class="fas fa-calendar-alt me-2"></i>Shared Calendar<span class="feature-badge">Coming Soon</span></h6>
+        <p>Coordinate study sessions with group calendars</p>
+      </div>
+
+      <div class="feature-item" onclick="showFeatureAlert('Group Chat')">
+        <h6><i class="fas fa-comments me-2"></i>Group Chat<span class="feature-badge">Coming Soon</span></h6>
+        <p>Communicate with your study groups in real-time</p>
+      </div>
+
+      <div class="feature-item" onclick="showFeatureAlert('Shared Tasks')">
+        <h6><i class="fas fa-tasks me-2"></i>Shared Tasks<span class="feature-badge">Coming Soon</span></h6>
+        <p>Collaborate on assignments and track group progress</p>
+      </div>
+    </div>
+
+    <!-- Info Box -->
+    <div class="card-box" style="background: var(--accent-light); border-color: var(--accent);">
+      <h5><i class="fas fa-info-circle me-2"></i>Coming Soon!</h5>
+      <p style="margin: 0;">
+        We're working hard to bring you powerful collaboration features. Stay tuned for updates!
+      </p>
+    </div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Feature click handler
+    function showFeatureAlert(featureName) {
+      const messages = {
+        'Friend Connections': '👥 Friend Connections feature is coming soon! You\'ll be able to connect with classmates and build your study network.',
+        'Study Groups': '📚 Study Groups feature is coming soon! Create and join groups to collaborate on projects and assignments.',
+        'Shared Calendar': '📅 Shared Calendar feature is coming soon! Coordinate study sessions and track group deadlines together.',
+        'Group Chat': '💬 Group Chat feature is coming soon! Real-time messaging with your study groups.',
+        'Shared Tasks': '✅ Shared Tasks feature is coming soon! Collaborate on assignments and track progress together.'
+      };
+
+      const message = messages[featureName] || 'This feature is coming soon!';
+
+      // Create a custom styled alert
+      const alertDiv = document.createElement('div');
+      alertDiv.style.cssText = `
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: var(--bg-card);
+        color: var(--text-primary);
+        padding: 32px 40px;
+        border-radius: 16px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        z-index: 10000;
+        max-width: 500px;
+        text-align: center;
+        border: 2px solid var(--accent);
+        animation: slideIn 0.3s ease-out;
+      `;
+
+      alertDiv.innerHTML = `
+        <h5 style="margin-bottom: 16px; color: var(--accent);">
+          <i class="fas fa-rocket me-2"></i>${featureName}
+        </h5>
+        <p style="margin-bottom: 24px; color: var(--text-secondary);">${message}</p>
+        <button onclick="this.parentElement.remove(); document.getElementById('overlay').remove();" 
+                style="background: var(--accent); color: white; border: none; padding: 10px 24px; 
+                       border-radius: 8px; cursor: pointer; font-weight: 600; transition: opacity 0.2s;">
+          Got it!
+        </button>
+      `;
+
+      // Create overlay
+      const overlay = document.createElement('div');
+      overlay.id = 'overlay';
+      overlay.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 9999;
+        animation: fadeIn 0.3s ease-out;
+      `;
+      overlay.onclick = () => {
+        alertDiv.remove();
+        overlay.remove();
+      };
+
+      // Add animation styles
+      if (!document.getElementById('alert-animations')) {
+        const style = document.createElement('style');
+        style.id = 'alert-animations';
+        style.textContent = `
+          @keyframes slideIn {
+            from {
+              transform: translate(-50%, -60%);
+              opacity: 0;
+            }
+            to {
+              transform: translate(-50%, -50%);
+              opacity: 1;
+            }
+          }
+          @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+          }
+        `;
+        document.head.appendChild(style);
+      }
+
+      document.body.appendChild(overlay);
+      document.body.appendChild(alertDiv);
+    }
+
+    // Theme Toggle
+    function toggleTheme() {
+      document.body.classList.toggle('dark-mode');
+      const isDark = document.body.classList.contains('dark-mode');
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+      updateThemeIcon(isDark);
+    }
+
+    function updateThemeIcon(isDark) {
+      const themeIcon = document.getElementById('theme-icon');
+      if (isDark) {
+        themeIcon.classList.remove('fa-moon');
+        themeIcon.classList.add('fa-sun');
+      } else {
+        themeIcon.classList.remove('fa-sun');
+        themeIcon.classList.add('fa-moon');
+      }
+    }
+
+    // Load saved theme
+    document.addEventListener("DOMContentLoaded", () => {
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme === 'dark') {
+        document.body.classList.add('dark-mode');
+        updateThemeIcon(true);
+      }
+    });
+  </script>
+</body>
+
+</html>

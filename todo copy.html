@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>To-Do Guide - Study Buddy</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background: #f1f5f9;
+      font-family: 'Segoe UI', sans-serif;
+      padding: 30px;
+    }
+    .guide-container {
+      max-width: 1200px;
+      margin: auto;
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+      padding: 30px;
+    }
+    .section-title {
+      border-bottom: 2px solid #2563eb;
+      padding-bottom: 8px;
+      margin-bottom: 20px;
+      color: #2563eb;
+    }
+    .todo-list input[type="text"] {
+      width: 80%;
+      margin-right: 10px;
+    }
+    .calendar, .flowchart, .guide-tips, .active-courses {
+      margin-top: 30px;
+    }
+    .priority-box span, .task-status span {
+      padding: 5px 12px;
+      border-radius: 15px;
+      margin-right: 10px;
+      font-size: 0.85rem;
+      cursor: pointer;
+    }
+    .priority-box span:hover, .task-status span:hover {
+      opacity: 0.8;
+    }
+    #flowchartCanvas {
+      border: 1px dashed #ccc;
+      width: 100%;
+      height: 300px;
+      margin-top: 10px;
+      cursor: crosshair;
+    }
+    .tips ul {
+      list-style: square;
+      padding-left: 20px;
+    }
+    .canvas-tools {
+      margin-top: 10px;
+    }
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+  <div class="guide-container">
+    <h2 class="section-title">📋 To-Do Guide & Calendar</h2>
+
+    <div class="todo-list">
+      <h5>To-Do List</h5>
+      <input type="text" id="todoInput" placeholder="Add new task..." class="form-control d-inline" style="width: 75%;">
+      <button class="btn btn-primary" onclick="addTask()">Add</button>
+      <ul id="todoItems" class="mt-3"></ul>
+    </div>
+
+      <div class="calendar-wrapper">
+        <div class="calendar-header">
+          <button id="prevMonth" class="btn btn-outline-primary btn-sm">&lt; Prev</button>
+          <h4 id="monthYear"></h4>
+          <button id="nextMonth" class="btn btn-outline-primary btn-sm">Next &gt;</button>
+        </div>
+        <table class="table table-bordered text-center">
+          <thead>
+            <tr>
+              <th>Sun</th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th>
+            </tr>
+          </thead>
+          <tbody id="calendarBody"></tbody>
+        </table>
+      </div>
+      : none;"></iframe>
+    </div>
+
+    <div class="active-courses">
+      <h5>📚 Active Courses</h5>
+      <ul>
+        <li>Data Science with Python - 4 Weeks - Ongoing</li>
+        <li>Web Development Bootcamp - 6 Weeks - Mid Review This Week</li>
+      </ul>
+    </div>
+
+    <div class="priority-box">
+      <h5>⚡ Set Priority (Click to Filter)</h5>
+      <span class="badge bg-danger" onclick="filterTasks('High')">High</span>
+      <span class="badge bg-warning text-dark" onclick="filterTasks('Medium')">Medium</span>
+      <span class="badge bg-secondary" onclick="filterTasks('Low')">Low</span>
+      <span class="badge bg-dark" onclick="filterTasks('All')">Show All</span>
+    </div>
+
+    <div class="task-status mt-3">
+      <h5>📊 Task Status (Click to Filter)</h5>
+      <span class="badge bg-primary" onclick="filterStatus('Pending')">Pending</span>
+      <span class="badge bg-info text-dark" onclick="filterStatus('Running')">Running</span>
+      <span class="badge bg-success" onclick="filterStatus('Completed')">Completed</span>
+      <span class="badge bg-dark" onclick="filterStatus('All')">Show All</span>
+    </div>
+
+    <div class="flowchart">
+      <h5>🧩 Workflow & Flowchart</h5>
+      <canvas id="flowchartCanvas"></canvas>
+      <div class="canvas-tools">
+        <button class="btn btn-outline-secondary btn-sm" onclick="clearCanvas()">Clear</button>
+        <button class="btn btn-outline-success btn-sm" onclick="downloadCanvas()">Download</button>
+        <input type="file" accept="image/*" onchange="uploadImage(event)" class="form-control form-control-sm mt-2" />
+      </div>
+      <p class="text-muted small">Draw freely to map your work strategy or upload an existing flowchart.</p>
+    </div>
+
+    <div class="guide-tips tips">
+      <h5>🧠 Productivity Methods & Tips</h5>
+      <ul>
+        <li><strong>80/20 Rule:</strong> Focus on the 20% of tasks that bring 80% results.</li>
+        <li><strong>Pomodoro Technique:</strong> 25 mins work, 5 mins break.</li>
+        <li><strong>Eisenhower Matrix:</strong> Urgent vs Important to prioritize smartly.</li>
+        <li><strong>Time Blocking:</strong> Allocate blocks of time to focus on specific work.</li>
+      </ul>
+    </div>
+
+    <div class="mt-4 text-end">
+      <a href="index.html" class="btn btn-outline-secondary">← Back to Dashboard</a>
+    </div>
+  </div>
+
+  <script>
+    const tasks = [];
+
+    function addTask() {
+      const input = document.getElementById("todoInput");
+      const item = input.value.trim();
+      if (item !== "") {
+        const priority = prompt("Enter priority: High, Medium, Low", "Medium");
+        const status = prompt("Enter status: Pending, Running, Completed", "Pending");
+        const task = { text: item, priority, status };
+        tasks.push(task);
+        renderTasks();
+        input.value = "";
+      }
+    }
+
+    function renderTasks(filterType = 'All', filterStatus = 'All') {
+      const ul = document.getElementById("todoItems");
+      ul.innerHTML = "";
+      tasks.forEach(task => {
+        const matchPriority = filterType === 'All' || task.priority === filterType;
+        const matchStatus = filterStatus === 'All' || task.status === filterStatus;
+        if (matchPriority && matchStatus) {
+          const li = document.createElement("li");
+          li.textContent = `${task.text} [${task.priority}, ${task.status}]`;
+          ul.appendChild(li);
+        }
+      });
+    }
+
+    let currentPriorityFilter = 'All';
+    let currentStatusFilter = 'All';
+
+    function filterTasks(priority) {
+      currentPriorityFilter = priority;
+      renderTasks(currentPriorityFilter, currentStatusFilter);
+    }
+
+    function filterStatus(status) {
+      currentStatusFilter = status;
+      renderTasks(currentPriorityFilter, currentStatusFilter);
+    }
+
+    // Canvas drawing
+    const canvas = document.getElementById("flowchartCanvas");
+    const ctx = canvas.getContext("2d");
+    let drawing = false;
+
+    canvas.addEventListener("mousedown", () => drawing = true);
+    canvas.addEventListener("mouseup", () => drawing = false);
+    canvas.addEventListener("mouseout", () => drawing = false);
+    canvas.addEventListener("mousemove", draw);
+
+    function draw(e) {
+      if (!drawing) return;
+      ctx.lineWidth = 2;
+      ctx.lineCap = "round";
+      ctx.strokeStyle = "#1f2937";
+
+      const rect = canvas.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+
+      ctx.lineTo(x, y);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(x, y);
+    }
+
+    function clearCanvas() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.beginPath();
+    }
+
+    function downloadCanvas() {
+      const link = document.createElement('a');
+      link.download = 'flowchart.png';
+      link.href = canvas.toDataURL();
+      link.click();
+    }
+
+    function uploadImage(event) {
+      const file = event.target.files[0];
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const img = new Image();
+        img.onload = function() {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        }
+        img.src = e.target.result;
+      }
+      if (file) reader.readAsDataURL(file);
+    }
+   fetch('calendar.html')
+  .then(res => res.text())
+  .then(html => {
+    document.getElementById('calendarContainer').innerHTML = html;
+  });
+
+  </script>
+</body>
+</html>

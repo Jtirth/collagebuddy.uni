@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Basic AI Feedback Report PDF</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background: #f2f2f2;
+      text-align: center;
+    }
+    button {
+      padding: 12px 20px;
+      font-size: 1.2rem;
+      background-color: #4169e1;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #274bb5;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Generate Basic AI Feedback Report PDF</h1>
+  <button id="generatePdfBtn">Download Feedback Report</button>
+
+  <script>
+    const { jsPDF } = window.jspdf;
+
+    document.getElementById('generatePdfBtn').addEventListener('click', () => {
+      const doc = new jsPDF();
+
+      doc.setFontSize(18);
+      doc.text('Interview Feedback Report', 14, 20);
+
+      doc.setFontSize(12);
+      doc.text('Candidate: John Doe', 14, 35);
+      doc.text('Date: 2025-08-07', 14, 43);
+
+      doc.setFontSize(14);
+      doc.text('Score Breakdown:', 14, 60);
+
+      const scores = [
+        { label: 'Communication Clarity', value: '75%' },
+        { label: 'Confidence', value: '68%' },
+        { label: 'Content Quality', value: '80%' },
+        { label: 'Body Language', value: '60%' },
+      ];
+
+      let y = 70;
+      scores.forEach(score => {
+        doc.text(`${score.label}: ${score.value}`, 20, y);
+        y += 8;
+      });
+
+      y += 10;
+      doc.text('Transcript Highlights & Suggestions:', 14, y);
+      y += 8;
+
+      const transcriptHighlights = [
+        'Area to Improve: Needs to clearly articulate technical concepts.',
+        'Suggestion: Practice structuring answers in the STAR format.',
+        'Observation: Shows good enthusiasm but occasionally hesitates.',
+        'Tip: Work on pacing and avoid filler words like “um” and “uh”.',
+      ];
+
+      transcriptHighlights.forEach(line => {
+        const splitText = doc.splitTextToSize(line, 180);
+        doc.text(splitText, 20, y);
+        y += splitText.length * 7;
+      });
+
+      y += 5;
+      doc.text('Personalized Tips:', 14, y);
+      y += 8;
+
+      const tips = [
+        'Prepare answers for common behavioral questions.',
+        'Practice speaking slowly and confidently.',
+        'Use concrete examples to back up your skills.',
+        'Maintain open body language and eye contact.'
+      ];
+
+      tips.forEach(tip => {
+        const splitText = doc.splitTextToSize(`• ${tip}`, 180);
+        doc.text(splitText, 20, y);
+        y += splitText.length * 7;
+      });
+
+      y += 10;
+      doc.text('Next Steps:', 14, y);
+      y += 8;
+
+      const nextSteps = [
+        'Schedule more mock interviews focusing on technical questions.',
+        'Review feedback after each session to track improvement.'
+      ];
+
+      nextSteps.forEach(step => {
+        const splitText = doc.splitTextToSize(`- ${step}`, 180);
+        doc.text(splitText, 20, y);
+        y += splitText.length * 7;
+      });
+
+      doc.save('Basic_AI_Feedback_Report_JohnDoe.pdf');
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,94 @@
+/* ===== Navbar Base Styles ===== */
+.navbar {
+  background-color: #4169e1;
+  color: white;
+  padding: 12px 20px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 9999;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+/* Container for logo + toggle + menu */
+.nav-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+/* Logo */
+.nav-logo {
+  font-weight: 700;
+  font-size: 1.5rem;
+  text-decoration: none;
+  color: white;
+}
+
+/* Toggle (hamburger) - hidden by default */
+.nav-toggle {
+  display: none;
+  font-size: 28px;
+  cursor: pointer;
+  color: white;
+  user-select: none;
+  margin-right: 8%;
+}
+
+/* Nav Menu */
+.nav-menu {
+  list-style: none;
+  display: flex;
+  gap: 24px;
+  margin: 0;
+  padding: 0;
+}
+
+/* Nav Links */
+.nav-link {
+  text-decoration: none;
+  color: white;
+  font-weight: 600;
+  transition: color 0.2s;
+}
+
+.nav-link:hover,
+.nav-link:focus {
+  color: #d1d9ff;
+  outline: none;
+}
+
+/* ===== Responsive for Mobile ===== */
+@media (max-width: 768px) {
+  .nav-toggle {
+    display: block;
+  }
+
+  .nav-menu {
+    display: none;
+    flex-direction: column;
+    width: 90%;
+    background-color: #4169e1;
+    padding: 10px 0;
+  }
+
+  .nav-menu.show {
+    display: flex;
+  }
+
+  .nav-link {
+    padding: 10px 20px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .nav-container {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
